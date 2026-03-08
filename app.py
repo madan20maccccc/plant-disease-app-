@@ -126,6 +126,8 @@ def result():
     return render_template("result.html", prediction=prediction, image_path=image_path)
 
 
+# Load model when app starts (works with gunicorn too)
+load_model()
+
 if __name__ == "__main__":
-    load_model()
     app.run(debug=True, host="0.0.0.0", port=5000)

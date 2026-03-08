@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analysis Result – PlantCare AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1db954;
+    --green-dark: #15903e;
+    --green-light: #e8faf0;
+    --green-mid: #c6f0d6;
+    --red: #e53e3e;
+    --red-light: #fff5f5;
+    --red-mid: #fed7d7;
+    --text: #0f1f14;
+    --muted: #6b7c72;
+    --white: #ffffff;
+    --bg: #f7faf8;
+    --shadow: 0 4px 24px rgba(29,185,84,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Satoshi', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 60px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(29,185,84,0.10);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.3rem; font-weight: 700; color: var(--text);
+    text-decoration: none;
+  }
+  
+  .logo-svg { width: 36px; height: 36px; flex-shrink: 0; }
+  .logo-icon-old {
+    width: 36px; height: 36px; background: var(--green);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 20px; height: 20px; fill: white; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem;
+  }
+  .btn-nav-new {
+    background: var(--green); color: white !important;
+    padding: 9px 22px; border-radius: 8px; font-weight: 600 !important;
+    transition: background 0.2s;
+  }
+  .btn-nav-new:hover { background: var(--green-dark) !important; }
+
+  .main {
+    flex: 1; padding: 110px 60px 60px;
+    max-width: 1100px; margin: 0 auto; width: 100%;
+  }
+  .page-title { text-align: center; margin-bottom: 44px; }
+  .page-title h1 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2.2rem; font-weight: 700; margin-bottom: 8px;
+  }
+  .page-title p { color: var(--muted); }
+
+  .result-layout {
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px;
+    align-items: start;
+  }
+  .image-card {
+    background: white; border-radius: 18px; padding: 28px;
+    border: 1.5px solid #eaf2ed;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .image-card h3 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 0.9rem; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 18px;
+  }
+  .image-card img {
+    width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 12px;
+  }
+  .result-card {
+    background: white; border-radius: 18px; padding: 32px;
+    border: 1.5px solid #eaf2ed;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 16px; border-radius: 100px;
+    font-weight: 700; font-size: 0.82rem; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 28px;
+  }
+  .status-badge.healthy { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-mid); }
+  .status-badge.disease { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .healthy .status-dot { background: var(--green); }
+  .disease .status-dot { background: var(--red); }
+  .status-icon {
+    width: 72px; height: 72px; border-radius: 20px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 24px;
+  }
+  .status-icon.healthy { background: var(--green-light); }
+  .status-icon.disease { background: var(--red-light); }
+  .status-icon svg { width: 40px; height: 40px; }
+  .detail-row { margin-bottom: 20px; }
+  .detail-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  }
+  .detail-value {
+    font-family: 'Clash Display', sans-serif; font-size: 1.5rem; font-weight: 700;
+  }
+  .detail-value.healthy-color { color: var(--green); }
+  .detail-value.disease-color { color: var(--red); }
+  .detail-value.normal-color { color: var(--text); }
+  .actions-box { border-radius: 12px; padding: 22px; margin-top: 24px; }
+  .actions-box.healthy { background: var(--green-light); border: 1px solid var(--green-mid); }
+  .actions-box.disease { background: var(--red-light); border: 1px solid var(--red-mid); }
+  .actions-box h4 {
+    font-family: 'Clash Display', sans-serif; font-size: 0.95rem; font-weight: 700;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .actions-box.healthy h4 { color: var(--green-dark); }
+  .actions-box.disease h4 { color: var(--red); }
+  .action-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .action-list li { font-size: 0.9rem; display: flex; align-items: flex-start; gap: 8px; }
+  .action-list li::before { content: '•'; flex-shrink: 0; font-weight: 700; margin-top: 1px; }
+  .actions-box.healthy .action-list li { color: var(--green-dark); }
+  .actions-box.healthy .action-list li::before { color: var(--green); }
+  .actions-box.disease .action-list li { color: #7b2727; }
+  .actions-box.disease .action-list li::before { color: var(--red); }
+  .result-btns { display: flex; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green); color: white;
+    padding: 13px 24px; border-radius: 10px; font-weight: 600;
+    text-decoration: none; font-size: 0.95rem;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 14px rgba(29,185,84,0.25);
+  }
+  .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--text);
+    padding: 13px 24px; border-radius: 10px; font-weight: 600;
+    text-decoration: none; font-size: 0.95rem;
+    border: 1.5px solid #dde8e2; transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--green); background: var(--green-light); }
+  footer {
+    background: white; border-top: 1px solid #eaf2ed;
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 40px;
+  }
+  .footer-logo { font-family: 'Clash Display', sans-serif; font-weight: 700; }
+  footer p { color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">
+    <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="28" fill="#e8faf0"/>
+      <circle cx="88" cy="92" r="38" fill="#c6f0d6" opacity="0.75"/>
+      <path d="M50 74 C50 74 39 59 43 44 C47 29 64 25 74 30 C84 35 85 50 78 61 C71 72 58 72 50 74Z" fill="#1db954"/>
+      <path d="M50 74 C57 61 70 51 74 30" stroke="#15903e" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M64 30 C64 30 71 21 79 24 C74 31 66 31 64 30Z" fill="#15903e"/>
+      <path d="M64 30 C64 30 55 20 47 24 C53 29 62 31 64 30Z" fill="#1db954" opacity="0.85"/>
+      <line x1="50" y1="74" x2="48" y2="85" stroke="#15903e" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+    PlantCare AI
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/upload" class="btn-nav-new">New Analysis</a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="page-title">
+    <h1>Analysis Complete</h1>
+    <p>Here's what we found</p>
+  </div>
+
+  {% set parts = prediction.split('___') %}
+  {% set plant_name = parts[0].replace('_', ' ') %}
+  {% set condition_raw = parts[1].replace('_', ' ') if parts|length > 1 else 'Unknown' %}
+  {% set is_healthy = 'healthy' in prediction.lower() %}
+
+  <div class="result-layout">
+
+    <div class="image-card">
+      <h3>Uploaded Image</h3>
+      <img src="{{ url_for('static', filename=image_path) }}" alt="Uploaded plant image">
+    </div>
+
+    <div class="result-card">
+
+      {% if is_healthy %}
+      <div class="status-badge healthy">
+        <span class="status-dot"></span>
+        Healthy Plant
+      </div>
+      <div class="status-icon healthy">
+        <svg fill="none" stroke="#1db954" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke-linecap="round"/>
+          <polyline points="22,4 12,14.01 9,11.01" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      {% else %}
+      <div class="status-badge disease">
+        <span class="status-dot"></span>
+        Disease Detected
+      </div>
+      <div class="status-icon disease">
+        <svg fill="none" stroke="#e53e3e" stroke-width="2.5" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="15" y1="9" x2="9" y2="15" stroke-linecap="round"/>
+          <line x1="9" y1="9" x2="15" y2="15" stroke-linecap="round"/>
+        </svg>
+      </div>
+      {% endif %}
+
+      <div class="detail-row">
+        <div class="detail-label">Plant Type</div>
+        <div class="detail-value normal-color">{{ plant_name }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Condition</div>
+        {% if is_healthy %}
+        <div class="detail-value healthy-color">Healthy</div>
+        {% else %}
+        <div class="detail-value disease-color">{{ condition_raw }}</div>
+        {% endif %}
+      </div>
+
+      {% if is_healthy %}
+      <div class="actions-box healthy">
+        <h4>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M17 8C8 10 5.9 16.17 3.82 21.5L5.71 22l1-2.3A4.49 4.49 0 008 20C19 20 22 3 22 3c-1 2-8 2-11 2 1-3 5-4.5 6-5z"/>
+          </svg>
+          Keep Your Plant Healthy
+        </h4>
+        <ul class="action-list">
+          <li>Continue regular watering and care</li>
+          <li>Ensure adequate sunlight and nutrients</li>
+          <li>Monitor for any changes in appearance</li>
+          <li>Maintain good air circulation</li>
+        </ul>
+      </div>
+      {% else %}
+      <div class="actions-box disease">
+        <h4>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Recommended Actions
+        </h4>
+        <ul class="action-list">
+          <li>Isolate affected plants to prevent spread</li>
+          <li>Consult with an agricultural expert</li>
+          <li>Consider appropriate treatment methods</li>
+          <li>Monitor other plants for similar symptoms</li>
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="result-btns">
+        <a href="/upload" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          Analyze Another Image
+        </a>
+        <a href="/" class="btn-outline">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9,22 9,12 15,12 15,22"/>
+          </svg>
+          Back to Home
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">🌿 Smart Bridge Hyderabad</div>
+  <p>© 2025 Smart Bridge Hyderabad. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

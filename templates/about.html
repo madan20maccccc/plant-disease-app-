@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About – PlantCare AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1db954;
+    --green-dark: #15903e;
+    --green-light: #e8faf0;
+    --green-mid: #c6f0d6;
+    --text: #0f1f14;
+    --muted: #6b7c72;
+    --bg: #f7faf8;
+    --card: #ffffff;
+    --shadow: 0 4px 24px rgba(29,185,84,0.10);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Satoshi', sans-serif;
+    background: var(--bg); color: var(--text); overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 60px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(29,185,84,0.10);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.25rem; font-weight: 700; color: var(--text);
+    text-decoration: none;
+  }
+  /* Inline SVG logo — 36×36 */
+  .logo-svg {
+    width: 36px; height: 36px; flex-shrink: 0;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-weight: 500; font-size: 0.95rem; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--green); }
+  .btn-nav {
+    background: var(--green); color: white !important;
+    padding: 9px 22px; border-radius: 8px; font-weight: 600 !important;
+    transition: background 0.2s !important;
+  }
+  .btn-nav:hover { background: var(--green-dark) !important; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding: 130px 60px 70px; text-align: center; background: white;
+  }
+  .section-label {
+    display: inline-block; color: var(--green); font-weight: 700;
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .page-header h1 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2.8rem; font-weight: 700; margin-bottom: 14px;
+  }
+  .page-header p { color: var(--muted); font-size: 1.05rem; }
+
+  /* ── MISSION ── */
+  .mission-wrap { background: white; }
+  .mission {
+    max-width: 1100px; margin: 0 auto;
+    padding: 80px 60px;
+    display: flex; align-items: center; gap: 70px;
+  }
+  .mission-text { flex: 1; }
+  .mission-text h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2rem; font-weight: 700; margin-bottom: 20px;
+  }
+  .mission-text p {
+    color: var(--muted); line-height: 1.8; font-size: 0.97rem; margin-bottom: 16px;
+  }
+
+  /* Logo card — matches the uploaded reference image */
+  .mission-visual {
+    flex-shrink: 0; width: 280px; height: 280px;
+    background: var(--green-light);
+    border-radius: 28px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    box-shadow: 0 8px 40px rgba(29,185,84,0.12);
+  }
+  /* decorative circle bottom-right, just like the reference */
+  .mission-visual::after {
+    content: '';
+    position: absolute; bottom: -40px; right: -40px;
+    width: 170px; height: 170px;
+    background: var(--green-mid); border-radius: 50%; opacity: 0.8;
+  }
+  .mission-visual .big-logo {
+    width: 130px; height: 130px; position: relative; z-index: 1;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-wrap { background: var(--bg); }
+  .how {
+    padding: 80px 60px; max-width: 1100px; margin: auto;
+  }
+  .how-header { text-align: center; margin-bottom: 56px; }
+  .how-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2rem; font-weight: 700; margin-bottom: 10px;
+  }
+  .how-header p { color: var(--muted); }
+  .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+  .step {
+    background: white; border-radius: 16px; padding: 36px 28px;
+    border: 1.5px solid #eaf2ed; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .step:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--green-mid); }
+  .step-num {
+    width: 52px; height: 52px; background: var(--green); color: white;
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Clash Display', sans-serif; font-size: 1.4rem; font-weight: 700;
+    margin: 0 auto 20px;
+  }
+  .step h3 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.1rem; font-weight: 600; margin-bottom: 10px;
+  }
+  .step p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+
+  /* ── AI MODEL ── */
+  .model-section { background: white; padding: 80px 60px; }
+  .model-inner { max-width: 1100px; margin: auto; }
+  .model-header { text-align: center; margin-bottom: 52px; }
+  .model-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2rem; font-weight: 700; margin-bottom: 10px;
+  }
+  .model-header p { color: var(--muted); }
+  .model-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+  .model-card {
+    background: var(--bg); border-radius: 14px; padding: 28px;
+    border: 1.5px solid #eaf2ed;
+  }
+  .model-card-title {
+    color: var(--green); font-weight: 700; font-size: 0.85rem;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .model-card h3 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.2rem; font-weight: 600; margin-bottom: 6px;
+  }
+  .model-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+
+  /* ── BENEFITS ── */
+  .benefits-wrap { background: var(--bg); }
+  .benefits { padding: 80px 60px; max-width: 1100px; margin: auto; }
+  .benefits-header { text-align: center; margin-bottom: 52px; }
+  .benefits-header h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 2rem; font-weight: 700; margin-bottom: 10px;
+  }
+  .benefits-header p { color: var(--muted); }
+  .benefits-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  .benefit {
+    background: white; border-radius: 14px; padding: 28px 20px;
+    text-align: center; border: 1.5px solid #eaf2ed;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .benefit:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .benefit-icon { font-size: 2rem; margin-bottom: 14px; display: block; }
+  .benefit h4 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 0.98rem; font-weight: 600; margin-bottom: 8px;
+  }
+  .benefit p { color: var(--muted); font-size: 0.85rem; line-height: 1.5; }
+
+  /* ── TRY NOW ── */
+  .try-section { padding: 30px 60px 80px; background: var(--bg); }
+  .try-inner {
+    max-width: 1100px; margin: auto;
+    background: var(--green-light); border-radius: 20px; padding: 50px;
+    display: flex; justify-content: space-between; align-items: center;
+    border: 1.5px solid var(--green-mid);
+  }
+  .try-inner h2 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.7rem; font-weight: 700; margin-bottom: 8px;
+  }
+  .try-inner p { color: var(--muted); font-size: 0.97rem; }
+  .btn-primary {
+    background: var(--green); color: white;
+    padding: 14px 28px; border-radius: 10px; font-weight: 600;
+    text-decoration: none; font-size: 1rem; white-space: nowrap;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 16px rgba(29,185,84,0.25);
+  }
+  .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: white; border-top: 1px solid #eaf2ed;
+    padding: 32px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { display: flex; align-items: center; gap: 8px; }
+  .footer-brand .logo-svg { width: 28px; height: 28px; }
+  .footer-brand span {
+    font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 1rem;
+  }
+  footer p { color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════  NAVBAR  ═══════════════════════════ -->
+<nav>
+  <a href="/" class="logo">
+    <!-- Inline SVG logo (navbar size 36×36) -->
+    <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="28" fill="#e8faf0"/>
+      <circle cx="88" cy="92" r="38" fill="#c6f0d6" opacity="0.75"/>
+      <path d="M50 74 C50 74 39 59 43 44 C47 29 64 25 74 30 C84 35 85 50 78 61 C71 72 58 72 50 74Z" fill="#1db954"/>
+      <path d="M50 74 C57 61 70 51 74 30" stroke="#15903e" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M64 30 C64 30 71 21 79 24 C74 31 66 31 64 30Z" fill="#15903e"/>
+      <path d="M64 30 C64 30 55 20 47 24 C53 29 62 31 64 30Z" fill="#1db954" opacity="0.85"/>
+      <line x1="50" y1="74" x2="48" y2="85" stroke="#15903e" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+    PlantCare AI
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about" class="active">About</a>
+    <a href="/upload" class="btn-nav">Get Started</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════  PAGE HEADER  ═══════════════════════════ -->
+<div class="page-header">
+  <div class="section-label">Our Technology</div>
+  <h1>About Our Technology</h1>
+  <p>Transforming agriculture with artificial intelligence</p>
+</div>
+
+<!-- ═══════════════════════════  MISSION  ═══════════════════════════ -->
+<section class="mission-wrap">
+  <div class="mission">
+    <div class="mission-text">
+      <h2>Our Mission</h2>
+      <p>We are committed to revolutionizing plant health management through cutting-edge artificial intelligence. Our goal is to empower farmers, gardeners, and agricultural professionals with instant, accurate disease detection to protect crops and increase yields.</p>
+      <p>By making advanced AI technology accessible to everyone, we help prevent crop losses, reduce pesticide use, and promote sustainable farming practices.</p>
+    </div>
+
+    <!-- Logo card matching reference image style -->
+    <div class="mission-visual">
+      <svg class="big-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- No background rect here — the card itself is the bg -->
+        <circle cx="88" cy="92" r="38" fill="#c6f0d6" opacity="0.0"/> <!-- handled by ::after -->
+        <path d="M50 74 C50 74 39 59 43 44 C47 29 64 25 74 30 C84 35 85 50 78 61 C71 72 58 72 50 74Z" fill="#1db954"/>
+        <path d="M50 74 C57 61 70 51 74 30" stroke="#15903e" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <path d="M64 30 C64 30 71 21 79 24 C74 31 66 31 64 30Z" fill="#15903e"/>
+        <path d="M64 30 C64 30 55 20 47 24 C53 29 62 31 64 30Z" fill="#1db954" opacity="0.85"/>
+        <line x1="50" y1="74" x2="48" y2="85" stroke="#15903e" stroke-width="3.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  HOW IT WORKS  ═══════════════════════════ -->
+<section class="how-wrap">
+  <div class="how">
+    <div class="how-header">
+      <div class="section-label">Process</div>
+      <h2>How It Works</h2>
+      <p>Three simple steps to diagnose your plant</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Upload Image</h3>
+        <p>Take a photo of your plant leaf showing symptoms or upload an existing image.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>AI Analysis</h3>
+        <p>Our MobileNetV2 model processes the image using deep learning algorithms.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get Results</h3>
+        <p>Receive instant diagnosis with plant type and condition classification.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  AI MODEL  ═══════════════════════════ -->
+<section class="model-section">
+  <div class="model-inner">
+    <div class="model-header">
+      <div class="section-label">AI Technology</div>
+      <h2>Our AI Model</h2>
+      <p>Built on state-of-the-art deep learning architecture</p>
+    </div>
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="model-card-title">Architecture</div>
+        <h3>MobileNetV2</h3>
+        <p>Lightweight yet powerful neural network with transfer learning for fast, accurate inference on any device.</p>
+      </div>
+      <div class="model-card">
+        <div class="model-card-title">Training Data</div>
+        <h3>Thousands of Images</h3>
+        <p>Trained on thousands of labeled plant images across diverse conditions, lighting, and disease stages.</p>
+      </div>
+      <div class="model-card">
+        <div class="model-card-title">Supported Plants</div>
+        <h3>Apple, Tomato, Potato, Grape, Corn & more</h3>
+        <p>Covers the most commonly grown crops worldwide with more species being added regularly.</p>
+      </div>
+      <div class="model-card">
+        <div class="model-card-title">Disease Coverage</div>
+        <h3>38+ Diseases</h3>
+        <p>Identifies 38+ different diseases and healthy conditions with high precision and recall.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  BENEFITS  ═══════════════════════════ -->
+<section class="benefits-wrap">
+  <div class="benefits">
+    <div class="benefits-header">
+      <div class="section-label">Benefits</div>
+      <h2>Why It Matters</h2>
+      <p>Real impact for farmers and gardeners everywhere</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit">
+        <span class="benefit-icon">🌱</span>
+        <h4>Early Detection</h4>
+        <p>Identify diseases before they spread and cause major damage.</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">💰</span>
+        <h4>Cost Effective</h4>
+        <p>Reduce crop loss and treatment costs with timely diagnosis.</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">🌍</span>
+        <h4>Sustainable</h4>
+        <p>Minimize unnecessary pesticide use for eco-friendly farming.</p>
+      </div>
+      <div class="benefit">
+        <span class="benefit-icon">⚡</span>
+        <h4>Fast & Accurate</h4>
+        <p>Get results in seconds with high precision AI analysis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════  TRY NOW  ═══════════════════════════ -->
+<div class="try-section">
+  <div class="try-inner">
+    <div>
+      <h2>Try It Now</h2>
+      <p>Experience the power of AI-driven plant disease detection</p>
+    </div>
+    <a href="/upload" class="btn-primary">Start Detection</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════  FOOTER  ═══════════════════════════ -->
+<footer>
+  <div class="footer-brand">
+    <svg class="logo-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <rect width="120" height="120" rx="28" fill="#e8faf0"/>
+      <circle cx="88" cy="92" r="38" fill="#c6f0d6" opacity="0.75"/>
+      <path d="M50 74 C50 74 39 59 43 44 C47 29 64 25 74 30 C84 35 85 50 78 61 C71 72 58 72 50 74Z" fill="#1db954"/>
+      <path d="M50 74 C57 61 70 51 74 30" stroke="#15903e" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M64 30 C64 30 71 21 79 24 C74 31 66 31 64 30Z" fill="#15903e"/>
+      <path d="M64 30 C64 30 55 20 47 24 C53 29 62 31 64 30Z" fill="#1db954" opacity="0.85"/>
+      <line x1="50" y1="74" x2="48" y2="85" stroke="#15903e" stroke-width="3.2" stroke-linecap="round"/>
+    </svg>
+    <span>PlantCare AI</span>
+    <p style="color:var(--muted);font-size:0.82rem;margin-left:4px;">— Empowering agriculture through innovative AI solutions</p>
+  </div>
+  <p>© 2025 Smart Bridge Hyderabad. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
